@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="module_pa4-skeleton" default="compile.module.pa4-skeleton">
+  <dirname property="module.pa4-skeleton.basedir" file="${ant.file.module_pa4-skeleton}"/>
+  
+  <property name="module.jdk.home.pa4-skeleton" value="${project.jdk.home}"/>
+  <property name="module.jdk.bin.pa4-skeleton" value="${project.jdk.bin}"/>
+  <property name="module.jdk.classpath.pa4-skeleton" value="${project.jdk.classpath}"/>
+  
+  <property name="compiler.args.pa4-skeleton" value="-encoding UTF-8 -source 8 -target 8 ${compiler.args}"/>
+  
+  <property name="pa4-skeleton.output.dir" value="${module.pa4-skeleton.basedir}/../../../CS276_Assignment4/out/production"/>
+  <property name="pa4-skeleton.testoutput.dir" value="${module.pa4-skeleton.basedir}/../../../CS276_Assignment4/out/test"/>
+  
+  <path id="pa4-skeleton.module.bootclasspath">
+    <!-- Paths to be included in compilation bootclasspath -->
+  </path>
+  
+  <path id="pa4-skeleton.module.production.classpath">
+    <path refid="${module.jdk.classpath.pa4-skeleton}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="pa4-skeleton.runtime.production.module.classpath">
+    <pathelement location="${pa4-skeleton.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="pa4-skeleton.module.classpath">
+    <path refid="${module.jdk.classpath.pa4-skeleton}"/>
+    <pathelement location="${pa4-skeleton.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  <path id="pa4-skeleton.runtime.module.classpath">
+    <pathelement location="${pa4-skeleton.testoutput.dir}"/>
+    <pathelement location="${pa4-skeleton.output.dir}"/>
+    <path refid="library.lib.classpath"/>
+  </path>
+  
+  
+  <patternset id="excluded.from.module.pa4-skeleton">
+    <patternset refid="ignored.files"/>
+  </patternset>
+  
+  <patternset id="excluded.from.compilation.pa4-skeleton">
+    <patternset refid="excluded.from.module.pa4-skeleton"/>
+  </patternset>
+  
+  <path id="pa4-skeleton.module.sourcepath">
+    <dirset dir="${module.pa4-skeleton.basedir}">
+      <include name="src"/>
+    </dirset>
+  </path>
+  
+  
+  <target name="compile.module.pa4-skeleton" depends="compile.module.pa4-skeleton.production,compile.module.pa4-skeleton.tests" description="Compile module pa4-skeleton"/>
+  
+  <target name="compile.module.pa4-skeleton.production" depends="register.custom.compilers" description="Compile module pa4-skeleton; production classes">
+    <mkdir dir="${pa4-skeleton.output.dir}"/>
+    <javac2 destdir="${pa4-skeleton.output.dir}" debug="${compiler.debug}" nowarn="${compiler.generate.no.warnings}" memorymaximumsize="${compiler.max.memory}" fork="true" executable="${module.jdk.bin.pa4-skeleton}/javac">
+      <compilerarg line="${compiler.args.pa4-skeleton}"/>
+      <bootclasspath refid="pa4-skeleton.module.bootclasspath"/>
+      <classpath refid="pa4-skeleton.module.production.classpath"/>
+      <src refid="pa4-skeleton.module.sourcepath"/>
+      <patternset refid="excluded.from.compilation.pa4-skeleton"/>
+    </javac2>
+    
+    <copy todir="${pa4-skeleton.output.dir}">
+      <fileset dir="${module.pa4-skeleton.basedir}/src">
+        <patternset refid="compiler.resources"/>
+        <type type="file"/>
+      </fileset>
+    </copy>
+  </target>
+  
+  <target name="compile.module.pa4-skeleton.tests" depends="register.custom.compilers,compile.module.pa4-skeleton.production" description="compile module pa4-skeleton; test classes" unless="skip.tests"/>
+  
+  <target name="clean.module.pa4-skeleton" description="cleanup module">
+    <delete dir="${pa4-skeleton.output.dir}"/>
+    <delete dir="${pa4-skeleton.testoutput.dir}"/>
+  </target>
+</project>
